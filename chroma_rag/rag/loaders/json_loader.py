@@ -9,6 +9,27 @@ from chroma_rag.rag.loaders.utilities import get_text
 
 
 class CustomJSONLoader(JSONLoader):
+    """
+    Loads and processes JSON or JSON Lines files, extracting content and metadata for further use.
+
+    Attributes:
+        file_path: Path to the JSON or JSON Lines file.
+        content_key: Key or schema for extracting content from JSON objects.
+        metadata_func: Function to generate or update metadata dictionaries.
+        text_content: Flag indicating if content is expected as a string.
+        json_lines: Flag indicating if input data uses JSON Lines format.
+
+    Methods:
+        __init__
+        _parse
+        _get_text
+        _get_metadata
+        _validate_content_key
+        _validate_metadata_func
+
+    The class reads JSON or JSON Lines files, extracts content based on a specified key or jq-compatible schema, and can use a custom function to construct or enrich metadata. It includes methods for parsing input, verifying keys and metadata functions, and converting JSON samples to text suitable for downstream processing.
+    """
+
     def __init__(
         self,
         file_path: str | Path,
@@ -17,7 +38,8 @@ class CustomJSONLoader(JSONLoader):
         text_content: bool = True,
         json_lines: bool = False,
     ):
-        """Initializes the JSONLoader
+        """
+        Initializes the JSONLoader
         Args:
             file_path (Union[str, Path]): The path to the JSON or JSON Lines file.
             content_key (str): The key to use to extract the content from
@@ -31,7 +53,9 @@ class CustomJSONLoader(JSONLoader):
                 string format, default to True.
             json_lines (bool): Boolean flag to indicate whether the input is in
                 JSON Lines format.
+
         """
+
         self.file_path = Path(file_path).resolve()
         self._content_key = content_key
         self._metadata_func = metadata_func
@@ -39,7 +63,10 @@ class CustomJSONLoader(JSONLoader):
         self._json_lines = json_lines
 
     def _parse(self, content: str, index: int) -> Iterator[Document]:
-        """Convert given content to documents."""
+        """
+        Convert given content to documents.
+        """
+
         data = json.loads(content)
 
         if self._content_key is not None:
@@ -55,7 +82,10 @@ class CustomJSONLoader(JSONLoader):
             yield Document(page_content=text, metadata=metadata)
 
     def _get_text(self, sample: Any) -> str:
-        """Convert sample to string format"""
+        """
+        Convert sample to string format
+        """
+
         if self._content_key is not None:
             content = sample.get(self._content_key)
         else:
@@ -73,7 +103,8 @@ class CustomJSONLoader(JSONLoader):
     def _get_metadata(
         self, sample: dict[str, Any], **additional_fields: Any
     ) -> dict[str, Any]:
-        """Return a metadata dictionary based on the existence of metadata_func.
+        """
+        Generate a metadata dictionary for a document using either a custom processing function or the provided additional fields.
 
         Args:
             sample (dict[str, Any]): The data payload used for generating metadata.
@@ -81,14 +112,19 @@ class CustomJSONLoader(JSONLoader):
 
         Returns:
             dict[str, Any]: The resulting metadata dictionary for the document.
+
         """
+
         if self._metadata_func is not None:
             return self._metadata_func(sample, additional_fields)
         else:
             return additional_fields
 
     def _validate_content_key(self, data: list) -> None:
-        """Check if a content key is valid"""
+        """
+        Check if a content key is valid
+        """
+
         sample = data[0]
         if not isinstance(sample, dict):
             raise ValueError(
@@ -103,7 +139,10 @@ class CustomJSONLoader(JSONLoader):
             )
 
     def _validate_metadata_func(self, data: list) -> None:
-        """Check if the metadata_func output is valid"""
+        """
+        Check if the metadata_func output is valid
+        """
+
         sample = data[0]
         if self._metadata_func is not None:
             sample_metadata = self._metadata_func(sample, {})

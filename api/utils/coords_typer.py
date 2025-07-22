@@ -2,6 +2,10 @@ from typing import Dict, List
 
 
 def get_dimensions(lst: list | float):
+    """
+    No valid docstring found.
+    """
+
     if isinstance(lst, list):
         return 1 + max(get_dimensions(item) for item in lst)
     else:
@@ -9,6 +13,10 @@ def get_dimensions(lst: list | float):
 
 
 def get_territory_coordinate_type(coords: List) -> str:
+    """
+    No valid docstring found.
+    """
+
     n_dims = get_dimensions(coords)
     if n_dims == 4:
         return "MultiPolygon"
@@ -23,6 +31,10 @@ def get_territory_coordinate_type(coords: List) -> str:
 
 
 def prepare_typed_coords(coords: List) -> Dict:
+    """
+    No valid docstring found.
+    """
+
     return {
         "coordinates": coords,
         "type": get_territory_coordinate_type(coords),

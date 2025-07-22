@@ -7,6 +7,10 @@ def get_indicators(
     territory_type: str | None = None,
     coordinates: dict | None = None,
 ) -> dict:
+    """
+    No valid docstring found.
+    """
+
     # coordinates must be prepared and typed via api.utils.coords_typer.prepare_typed_coords
     if not indicators:
         msg = "Expected at least one indicator"

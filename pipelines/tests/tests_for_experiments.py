@@ -92,7 +92,8 @@ correctness_metric = GEval(
 
 
 def choose_pipeline_test(answer_check: bool = False) -> pd.DataFrame:
-    """Tests pipeline choosing functions.
+    """
+    Evaluates and benchmarks the accuracy and performance of functions responsible for automated selection and validation, collecting statistics and saving detailed results for analysis.
 
     Counts number of correctly chosen pipelines and measures elapsed time for
     choosing and checking results.
@@ -102,7 +103,9 @@ def choose_pipeline_test(answer_check: bool = False) -> pd.DataFrame:
         answer_check: flag whether to do a response check (True) or not (False)
 
     Returns: None
+
     """
+
     print("Pipeline choosing test is running...")
     test_name = "pipeline_selection"
     model_name = os.getenv("MODEL_NAME")
@@ -172,13 +175,16 @@ def choose_pipeline_test(answer_check: bool = False) -> pd.DataFrame:
     corr_pipe_percent_check = "RUN WITHOUT CHECKING"
     if answer_check:
         result_df.loc[:, "correct_or_not_check"] = result_df.apply(
-            lambda r: 1
-            if r["checked_pipeline_from_model"] == r["correct_pipeline"]
-            else 0,
+            lambda r: (
+                1 if r["checked_pipeline_from_model"] == r["correct_pipeline"] else 0
+            ),
             axis=1,
         )
         corr_pipe_percent_check = (
-            result_df["correct_or_not_check"].value_counts(normalize=True).loc[1].round(4)
+            result_df["correct_or_not_check"]
+            .value_counts(normalize=True)
+            .loc[1]
+            .round(4)
             * 100
         )
         avg_pipe_check_time = result_df["pipeline_checking_time"].mean().round(2)
@@ -197,7 +203,8 @@ Average pipeline checking time: {avg_pipe_check_time}"""
 # The same metrics as this function are counted in the next test, so there is little point
 # in running it separately
 def choose_functions_test(answer_check: bool = False) -> None:
-    """Tests API functions choosing function.
+    """
+    Evaluates the process of selecting relevant functions in response to a series of questions, tracking accuracy and timing performance, and recording the outcomes for analysis.
 
     Counts number of correctly chosen function and measures elapsed time for
     choosing and checking results.
@@ -207,7 +214,9 @@ def choose_functions_test(answer_check: bool = False) -> None:
         answer_check: flag whether to do a response check (True) or not (False)
 
     Returns: None
+
     """
+
     print("API functions choosing test is running...")
     test_name = "function_selection"
     model_name = os.getenv("MODEL_NAME")
@@ -286,7 +295,8 @@ Average function checking time: {avg_func_check_time}"""
 def accessibility_pipeline_test(
     metrics_to_calculate: List, answer_check: bool = False
 ) -> pd.DataFrame:
-    """Tests whole accessibility pipeline.
+    """
+    Executes an end-to-end evaluation process that assesses how accurately functions are selected, answers are generated, and timing performance is measured for a set of questions, compiling detailed results and summary statistics.
 
     Counts the number of correctly chosen functions and correct answers,
     measures elapsed time for choosing and checking and final answer
@@ -297,7 +307,9 @@ def accessibility_pipeline_test(
         answer_check: flag whether to do a response check (True) or not (False)
 
     Returns: None
+
     """
+
     print("Accessibility pipeline test is running...")
     test_name = "accessibility_pipeline"
     model_name = os.getenv("MODEL_NAME")
@@ -359,7 +371,9 @@ def accessibility_pipeline_test(
                 functions = []
             results["function_selection_time"].append(t.seconds_from_start)
             results["function_from_model"].append(functions)
-            functions = define_default_functions(t_type, t_name, coordinates) + functions
+            functions = (
+                define_default_functions(t_type, t_name, coordinates) + functions
+            )
             functions = set_default_value_if_empty(functions)
             results["functions_for_context"].append(functions)
         if answer_check:
@@ -429,7 +443,8 @@ def accessibility_pipeline_test(
     result_df.to_csv(path_to_df, index=False)
     mask = result_df["correct_pipeline"] == "service_accessibility_pipeline"
     correct_or_not = result_df[mask].apply(
-        lambda r: 1 if r["correct_function"] in r["functions_for_context"] else 0, axis=1
+        lambda r: 1 if r["correct_function"] in r["functions_for_context"] else 0,
+        axis=1,
     )
     # Calculation of basic statistics for exec time and function selection
     corr_func = correct_or_not.value_counts(normalize=True).loc[1].round(4) * 100
@@ -438,9 +453,9 @@ def accessibility_pipeline_test(
     avg_func_check_time = "RUN WITHOUT CHECKING"
     if answer_check:
         correct_or_not_check = result_df[mask].apply(
-            lambda r: 1
-            if r["correct_function"] in r["functions_for_context_check"]
-            else 0,
+            lambda r: (
+                1 if r["correct_function"] in r["functions_for_context_check"] else 0
+            ),
             axis=1,
         )
         corr_func_check = (
@@ -482,7 +497,8 @@ Short metrics results:
 def strategy_pipeline_test(
     metrics_to_calculate: List, chunk_num: int = 4
 ) -> pd.DataFrame:
-    """Tests strategy pipeline.
+    """
+    Executes a comprehensive test workflow that processes a series of questions, retrieves relevant contextual information, generates model answers, evaluates these answers using provided metrics, measures performance times, and compiles the results into a report and data file.
 
     Evaluate metrics for model answers using 'deepeval' and measures elapsed
     time for context retrieving and final answer generation.
@@ -493,7 +509,9 @@ def strategy_pipeline_test(
         chunk_num: number of chunks to be extracted from vector storage
 
     Returns: None
+
     """
+
     print("Strategy pipeline test is running...")
     test_name = "strategy_pipeline"
     model_name = os.getenv("MODEL_NAME")
@@ -596,20 +614,25 @@ def complete_pipeline_metrics(
     strategy_pipeline: str = None,
     check_flag: bool = False,
 ) -> None:
-    """Calculate complete statistics for app
+    """
+    Compute and display detailed evaluation metrics and performance statistics by aggregating test results across multiple processing stages, providing insights into accuracy, timing, and failure cases for each evaluated workflow.
 
     Args:
         pipeline_selection: pipeline selection test results file
         accessibility_pipeline: accessibility pipeline test results file
         strategy_pipeline: strategy pipeline test results file
         check_flag: run tests with answer check or not
+
     """
+
     files = [pipeline_selection, accessibility_pipeline, strategy_pipeline]
     test_names = ["pipeline_selection", "accessibility_pipeline", "strategy_pipeline"]
     paths = []
     if not all(files):
         pipeline_selection_df = choose_pipeline_test(answer_check=check_flag)
-        access_pipeline_df = accessibility_pipeline_test(metrics, answer_check=check_flag)
+        access_pipeline_df = accessibility_pipeline_test(
+            metrics, answer_check=check_flag
+        )
         strategy_pipeline_df = strategy_pipeline_test(metrics, chunks)
     else:
         for test_name, file_name in zip(test_names, files):
@@ -668,13 +691,15 @@ def complete_pipeline_metrics(
                 f" processed questions {failed_evaluations}"
             )
         short_metrics_result = "\n".join(metrics_to_print)
-        print(f"""Results for questions that have been assigned to the {pipeline}
+        print(
+            f"""Results for questions that have been assigned to the {pipeline}
 Number of failed questions: {failed_questions}
 Average answer generation time ({pipeline}): {avg_ans_generation_time}
 Average total time: ({pipeline}): {avg_total_time}
 Metrics results:
 {short_metrics_result}
-""")
+"""
+        )
 
     model_name = os.getenv("MODEL_NAME")
     print(f"Results for {model_name}")

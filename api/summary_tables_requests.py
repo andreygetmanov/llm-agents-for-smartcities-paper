@@ -11,6 +11,10 @@ def get_summary_table(
     territory_type: str | None = None,
     coordinates: list = None,
 ) -> Dict:
+    """
+    No valid docstring found.
+    """
+
     if name_id:
         return Api.EndpointsSummaryTables.get_summary_table(
             table=table,

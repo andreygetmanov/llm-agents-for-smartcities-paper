@@ -12,9 +12,8 @@ def merge_collections(
     collection_name_2: str,
     new_collection_name: str | None = None,
 ):
-    """Merge 2 collections into the 'collection_name_1' if 'new_collection_name' is None,
-    otherwise merge 2 collections into the new one with 'new_collection_name' name.
-    If any problems with network or DB accessibility will occur, exceptions are raised.
+    """
+    Combine the contents of two collections, ensuring no duplicate documents are included. By default, the merged data is stored in the first collection unless a new collection name is specified, in which case a new collection is created to hold the combined data. Raises exceptions if network or database issues are encountered.
 
     Args:
         chroma_client (chromadb.HttpClient): The Chroma DB client instance to interact with the database.
@@ -25,7 +24,9 @@ def merge_collections(
 
     Raises:
         Exception: If there are issues with network connectivity or database accessibility.
+
     """
+
     collection_1 = chroma_client.get_collection(name=collection_name_1)
     collection_2 = chroma_client.get_collection(name=collection_name_2)
 
@@ -66,7 +67,8 @@ def merge_collections(
 
 
 def delete_repeats(collection: Chroma) -> None:
-    """Remove duplicate documents from a collection.
+    """
+    Eliminate redundant items within a collection to ensure each entry is unique.
 
     Args:
         collection (Chroma): The collection from which duplicate documents will be removed. The collection
@@ -74,7 +76,9 @@ def delete_repeats(collection: Chroma) -> None:
 
     Raises:
         Exception: If there are issues accessing the database or performing deletion operations.
+
     """
+
     docs = collection.get(include=["documents", "metadatas", "embeddings"])
     delete_ids = []
 
@@ -86,7 +90,8 @@ def delete_repeats(collection: Chroma) -> None:
 
 
 def get_all_docs_names(collection: Chroma) -> set[str]:
-    """Return list of files' names from collection.
+    """
+    Retrieve the set of unique document names found within the provided collection by extracting the relevant metadata attribute from each entry.
 
     Args:
         collection (Chroma): The collection from which file names will be extracted. The collection should
@@ -97,17 +102,22 @@ def get_all_docs_names(collection: Chroma) -> set[str]:
 
     Raises:
         KeyError: If the key 'source' is not present in the metadata of any document in the collection.
+
     """
+
     docs: dict[str, Any] = collection.get()
 
     if "source" not in docs["metadatas"][0].keys():
         raise KeyError("There is no file name, called <source>, in document metadata")
 
-    return set(str(metadata["source"].split("\\")[-1]) for metadata in docs["metadatas"])
+    return set(
+        str(metadata["source"].split("\\")[-1]) for metadata in docs["metadatas"]
+    )
 
 
 def insert_documents(collection: Chroma, docs: Iterable[Document]):
-    """Insert only documents whose names aren't in 'collection'
+    """
+    Add documents to the collection only if their file names are not already present, ensuring no duplicates are introduced based on the 'source' field in metadata
 
     Args:
         collection (Chroma): The collection to which documents will be added. The collection should include
@@ -116,7 +126,9 @@ def insert_documents(collection: Chroma, docs: Iterable[Document]):
 
     Raises:
         KeyError: If the key 'source' is missing in the metadata of any document from the collection or the input documents.
+
     """
+
     first_element = next(docs)
     if "source" not in first_element.metadata.keys():
         raise KeyError("There is no file name, called <source>, in document metadata")

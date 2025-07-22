@@ -4,6 +4,10 @@ from pipelines.strategy_pipeline import strategy_development_pipeline
 
 
 def test_strategy_development_pipeline():
+    """
+    No valid docstring found.
+    """
+
     question = "What are the demographic development problems of Saint Petersburg?"
     answer = strategy_development_pipeline(question)
     print(f"\nStrategy development pipeline\nQuestion: {question}\nAnswer: {answer}\n")
@@ -11,6 +15,10 @@ def test_strategy_development_pipeline():
 
 
 def test_service_accessibility_pipeline():
+    """
+    No valid docstring found.
+    """
+
     question = "What is the average accessibility time of hospitals and schools?"
     territory_type = "city"
     territory_name = "Saint Petersburg"
@@ -23,6 +31,10 @@ def test_service_accessibility_pipeline():
 
 
 def test_master_pipeline():
+    """
+    No valid docstring found.
+    """
+
     question = "What are the demographic development problems of Saint Petersburg?"
     chunk_num = 4
     territory_type = "city"

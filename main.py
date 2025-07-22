@@ -13,6 +13,24 @@ from utils.logging_config import configure_logging
 
 
 class Question(BaseModel):
+    """
+    Represents a question related to a specific territory and chunk in a selection system.
+
+    Class Attributes:
+    - question_body: The text content of the question.
+    - chunk_num: The chunk number or segment the question is associated with.
+    - territory_name_id: The identifier corresponding to the territory's name.
+    - territory_type: The category or type of the territory.
+    - selection_zone: The zone within which the selection applies.
+
+    Methods:
+    - to_dict
+    - from_dict
+    - get_summary
+
+    The methods support serialization, deserialization, and provide a summary of the question's key information.
+    """
+
     question_body: str = (
         "What are the demographic development problems of Saint Petersburg?"
     )
@@ -51,7 +69,8 @@ logger = logging.getLogger(__name__)
 
 @app.post("/question")
 async def read_item(question: Question):
-    """Get a response for a given question using a RAG pipeline with a vector DB and LLM.
+    """
+    Process and answer user-submitted questions by integrating relevant contextual information and delivering a comprehensive response, while also providing associated request logs for transparency and traceability.
 
     Args:
         question_body (str): a question from the user (natural language, no additional prompts)
@@ -62,7 +81,9 @@ async def read_item(question: Question):
 
     Returns:
         dict: llm_res - pipeline's answer to the user's question
+
     """
+
     logger.info(f"Query: {question.question_body}")
     logger.info(f"Number of chunks: {question.chunk_num}")
     logger.info(f"Territory name: {question.territory_name_id}")
@@ -82,9 +103,12 @@ async def read_item(question: Question):
 
 @app.get("/build_test")
 async def build_test():
-    """Endpoint for build test
-
-    Returns:
-        dict: message - just an indicator
     """
+    Checks the application's operational status
+
+        Returns:
+            dict: message - just an indicator
+
+    """
+
     return {"message": "App is running"}
