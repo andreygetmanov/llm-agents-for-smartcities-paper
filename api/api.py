@@ -12,6 +12,20 @@ load_dotenv(ROOT / "config.env")
 
 
 class Api:
+    """
+    Provides methods for interfacing with a web API, including sending requests and handling responses.
+
+    Methods:
+        send_request
+        parse_response
+
+    Attributes:
+        base_url: The base URL of the API.
+        session: The current HTTP session used for requests.
+
+    The send_request method sends HTTP requests to the API, while parse_response processes the API's responses. The base_url attribute defines the root endpoint for API calls, and session manages persistent HTTP connections.
+    """
+
     class EndpointsListings:
         _base_url = os.environ.get("ENDPOINT_LISTINGS_URL")
         cities = GetEndpoint("/api/list/cities", param_names=("centers_only",))

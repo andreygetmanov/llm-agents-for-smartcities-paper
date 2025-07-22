@@ -10,6 +10,10 @@ from chroma_rag.rag.stores.chroma.chroma_loader import load_documents_to_chroma_
 
 
 def chroma_loading(path: str, collection: str) -> None:
+    """
+    No valid docstring found.
+    """
+
     # Loads data to ChromaDB
 
     default_settings.collection_name = collection
@@ -25,6 +29,10 @@ def chroma_loading(path: str, collection: str) -> None:
 
 
 def chroma_view(query: str, collection: str, k: int = 1) -> List:
+    """
+    No valid docstring found.
+    """
+
     # Returns k chunks that are closest to the query
     # TODO: check if it'll be better to use a pool of connections
     chroma_client = chromadb.HttpClient(
@@ -47,16 +55,26 @@ def chroma_view(query: str, collection: str, k: int = 1) -> List:
 
 
 def delete_collection(collection: str) -> None:
+    """
+    No valid docstring found.
+    """
+
     # Deletes the collection
     chroma_client = chromadb.HttpClient(
         host=default_settings.chroma_host,
         port=default_settings.chroma_port,
         settings=chromadb.Settings(allow_reset=default_settings.allow_reset),
     )
-    chroma_client.delete_collection(collection)  # TODO: check if collection exists first
+    chroma_client.delete_collection(
+        collection
+    )  # TODO: check if collection exists first
 
 
 def list_collections() -> List:
+    """
+    No valid docstring found.
+    """
+
     # Returns a list of all collections
     chroma_client = chromadb.HttpClient(
         host=default_settings.chroma_host,

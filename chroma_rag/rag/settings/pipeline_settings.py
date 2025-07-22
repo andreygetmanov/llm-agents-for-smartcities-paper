@@ -11,7 +11,28 @@ from chroma_rag.rag.pipeline.docs_processing.models import ConfigFile
 
 
 class Singleton:
+    """
+    Implements the Singleton design pattern to ensure only one instance of the class exists.
+
+    Class Methods:
+    - __new__:
+    """
+
     def __new__(cls, *args, **kwargs):
+        """
+        Ensures that only one instance of the class exists by returning a shared object upon each instantiation.
+
+        If the class instance does not already exist, this method creates and stores a singleton instance; otherwise, it returns the existing instance.
+
+        Args:
+            cls: The class to create an instance of.
+            *args: Variable length argument list passed to the constructor.
+            **kwargs: Arbitrary keyword arguments passed to the constructor.
+
+        Returns:
+            The singleton instance of the specified class.
+        """
+
         if not hasattr(cls, "instance"):
             cls.instance = super(Singleton, cls).__new__(cls)
         return cls.instance
@@ -26,19 +47,30 @@ class PipelineSettings(Singleton):
     """
 
     def __init__(self):
+        """
+        Sets up internal attributes to manage configuration data and document transformation components within the class.
+
+        Initializes the internal configuration dictionary and a list of document transformers as None.
+
+        Returns:
+            None: This method does not return a value.
+        """
+
         self._config_dict: ConfigFile | None = None
         self._transformers: list[BaseDocumentTransformer] | None = None
 
     def make_config_structure(self, config_file: str | TextIO):
-        """Loads and validates the configuration structure from a YAML file or stream,
-        and initializes the document transformers based on the configuration.
+        """
+        Parses a configuration from a YAML file or stream, checks its validity, and prepares the required transformation components as specified by the configuration.
 
         Args:
             config_file (str | TextIO): Path to the YAML configuration file or a text stream containing the configuration.
 
         Raises:
             TransformerNameError: If the specified transformer name in the configuration is not recognized.
+
         """
+
         if isinstance(config_file, str):
             with open(config_file) as f:
                 yaml_config = yaml.safe_load(f)
@@ -83,8 +115,26 @@ class PipelineSettings(Singleton):
 
     @property
     def config_structure(self) -> ConfigFile:
+        """
+        Provides a deep copy of the internal configuration dictionary to prevent accidental modifications.
+
+        This property retrieves a deep copy of the internal configuration dictionary, ensuring the original configuration remains unaltered by external modifications.
+
+        Returns:
+            ConfigFile: A deep copy of the current configuration structure.
+        """
+
         return deepcopy(self._config_dict)
 
     @property
     def transformers(self) -> list[BaseDocumentTransformer]:
+        """
+        Provides a duplicate list of transformation components currently configured for use.
+
+        This property provides access to the current set of document transformers associated with the instance, ensuring that the returned list cannot be modified to affect the original.
+
+        Returns:
+            list: A deep copy of the list containing the document transformers.
+        """
+
         return deepcopy(self._transformers)

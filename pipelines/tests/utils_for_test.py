@@ -11,7 +11,8 @@ base_path_to_results = Path(path_to_data, "test_results")
 def generate_path_to_results(
     test_name: str, model_name: str, check_flag: bool = False
 ) -> Tuple[Path, Path]:
-    """Generate paths to files with test results
+    """
+    Construct file paths for storing result data, incorporating test parameters and a creation timestamp for organized output management
 
     Paths are generated based on the name of the test, the model used, and the answer
     check flag. Also, a timestamp with the date and time of file creation is added to each
@@ -27,7 +28,9 @@ def generate_path_to_results(
         the path to a text file with short statistics on the test, and the
         full_results_path is the path to a csv file with details on each test sample.
 
+
     """
+
     test_datetime = str(datetime.datetime.now().replace(second=0, microsecond=0))
     if not check_flag:
         short_results_path = Path(

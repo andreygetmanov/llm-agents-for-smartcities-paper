@@ -14,6 +14,10 @@ from tests.test_data.api_objects_examples import possible_name_ids
 @pytest.mark.parametrize("table", possible_tables.values())
 @pytest.mark.parametrize("coord", coordinates)
 def test_get_general_stats_via_coords(table, coord):
+    """
+    No valid docstring found.
+    """
+
     # get coords in format: {'coords': [..., ...], 'type':Literal['Point', 'Polygon', 'Multipolygon']]}
     coord = prepare_typed_coords(coord["coords"])
     try:
@@ -29,6 +33,10 @@ def test_get_general_stats_via_coords(table, coord):
 @pytest.mark.parametrize("table", possible_tables.values())
 @pytest.mark.parametrize("name_and_type", possible_name_ids)
 def test_get_general_stats_via_name_id(table, name_and_type):
+    """
+    No valid docstring found.
+    """
+
     # unpack name and territory
     name_id, territory_type = name_and_type
     try:
@@ -46,6 +54,10 @@ def test_get_general_stats_via_name_id(table, name_and_type):
 @pytest.mark.parametrize("indicators", possible_indicators)
 @pytest.mark.parametrize("coord", coordinates)
 def test_get_indicator_stats(indicators, coord):
+    """
+    No valid docstring found.
+    """
+
     coord = prepare_typed_coords(coord["coords"])
     try:
         res = get_indicators([indicators], None, None, coord)
@@ -60,6 +72,10 @@ def test_get_indicator_stats(indicators, coord):
 @pytest.mark.parametrize("indicators", possible_indicators)
 @pytest.mark.parametrize("name_and_type", possible_name_ids)
 def test_get_indicators_via_name_id(indicators, name_and_type):
+    """
+    No valid docstring found.
+    """
+
     # unpack name and territory
     name_id, territory_type = name_and_type
     try:

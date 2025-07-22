@@ -21,7 +21,8 @@ def evaluate_on_predictions(
     model_name: str | None = None,
     **kwargs,
 ) -> Tuple[pd.DataFrame, Dict]:
-    """Function for LLM's answers evaluation with given set of metrics.
+    """
+    Evaluates generated answers by comparing them to reference answers across a customizable set of metrics, using provided question and contextual data to assess various aspects of output quality and performance.
 
     This function takes answers from LLM, correct answers, actual question,
     and other supplementary data, required by metrics to evaluate model's performance.
@@ -53,7 +54,9 @@ def evaluate_on_predictions(
         that were passed to the function. Second returned object is a dictionary with
         average metrics result and mean time performance, if time performance was
         specified.
+
     """
+
     content = {
         "input": question,
         "actual_output": answers,
