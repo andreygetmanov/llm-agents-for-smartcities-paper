@@ -5,14 +5,33 @@ class LLAMAHandler:
     """Class for interaction with llama models."""
 
     def __init__(self, model, tokenizer, *args, **kwargs) -> None:
+        """
+        Sets up the handler by storing the given model and tokenizer, and prepares an internal prompt attribute for future processing.
+
+        Args:
+            model: The language model to be used.
+            tokenizer: The tokenizer associated with the model.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            None: This method does not return a value.
+        """
+
         self.model = model  # Initialized model
         self.tokenizer = tokenizer
         self._prompt = None  # Set up default prompt
 
     def set_prompt(self):
-        """Method for prompt configuration."""
+        """
+        Method for prompt configuration.
+        """
+
         pass
 
     def generate(self, generation_config: Any, *args, **kwargs):
-        """Generate an answer given prompt and generation config."""
+        """
+        Generate an answer given prompt and generation config.
+        """
+
         pass

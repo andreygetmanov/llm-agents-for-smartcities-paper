@@ -42,13 +42,16 @@ class LanguageModelCreator:
 
     @classmethod
     def _get_model_type(cls, url: str) -> str:
-        """Checks the type of the LLM service by requesting the model name from it.
+        """
+        Determines the model category associated with the provided endpoint URL by analyzing its structure and querying its available models.
 
         Args:
             url: The LLM endpoint for making requests.
 
         Returns: The type of the LLM service.
+
         """
+
         if "stairs-llm-queue" in url:
             return "llama-70b-int4"
 
@@ -64,17 +67,22 @@ class LanguageModelCreator:
     def create_llm_connector(
         cls, model_url: str, sys_prompt: str
     ) -> BaseLanguageModelInterface:
-        """Creates the proper connector for a given LLM service.
+        """
+        Initializes and returns an interface to interact with a language model, configuring necessary connection parameters and processing logic based on the provided endpoint and prompt.
 
         Args:
             model_url: The LLM endpoint for making requests.
             sys_prompt: System prompt.
 
         Returns: The connector object that can be used to make requests to the LLM service.
+
         """
+
         if "vsegpt" in model_url:
             model_name = model_url.split(";")[1]
-            message_processor = BaseTextProcessor(all_gpt_template, vsegpt_postprocessing)
+            message_processor = BaseTextProcessor(
+                all_gpt_template, vsegpt_postprocessing
+            )
             return GPTWebLanguageModel(sys_prompt, model_name, message_processor)
         else:
             model_type = cls._get_model_type(model_url)

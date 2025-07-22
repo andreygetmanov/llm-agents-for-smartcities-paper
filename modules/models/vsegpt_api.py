@@ -21,13 +21,16 @@ class VseGPTConnector(DeepEvalBaseLLM):
         sys_prompt: str = "",
         base_url="https://api.vsegpt.ru/v1",
     ):
-        """Initialize instance with evaluation LLM.
+        """
+        Set up the connector by loading environment settings and initializing model configuration, system prompt, and API endpoint before preparing the model for use
 
         Args:
             model: Evaluation model's name
             sys_prompt: predefined rules for model
             base_url: URL where models are available
+
         """
+
         load_dotenv(path_to_config)
         self._sys_prompt = sys_prompt
         self._model_name = model
@@ -35,7 +38,10 @@ class VseGPTConnector(DeepEvalBaseLLM):
         self.model = self.load_model()
 
     def load_model(self) -> OpenAI:
-        """Load model's instance."""
+        """
+        Load model's instance.
+        """
+
         # TODO extend pull of possible LLMs (Not only just OpenAI's models)
         return OpenAI(api_key=os.environ.get("VSE_GPT_KEY"), base_url=self.base_url)
 
@@ -47,7 +53,8 @@ class VseGPTConnector(DeepEvalBaseLLM):
         *args,
         **kwargs,
     ) -> str:
-        """Get a response form LLM to given question.
+        """
+        Generate a text-based reply based on the provided input and optional supporting context, controlling output variability through temperature settings.
 
         Args:
             prompt (str): User's question, the model must answer.
@@ -57,7 +64,9 @@ class VseGPTConnector(DeepEvalBaseLLM):
 
         Returns:
             str: Model's response for user's question.
+
         """
+
         usr_msg_template = (
             prompt if context is None else f"Вопрос:{prompt} Контекст:{context}"
         )
@@ -84,7 +93,31 @@ class VseGPTConnector(DeepEvalBaseLLM):
         *args,
         **kwargs,
     ) -> str:
+        """
+        Produces a text output by leveraging a prompt and optional context, adjusting randomness with the provided temperature parameter.
+
+        Args:
+            prompt: The input text to generate a response for.
+            context: Optional supplementary context to guide the generation process.
+            temperature: Controls the randomness or creativity of the output. Lower values result in more deterministic output.
+            *args: Additional positional arguments passed to the underlying generate method.
+            **kwargs: Additional keyword arguments passed to the underlying generate method.
+
+        Returns:
+            str: The generated response as a string.
+        """
+
         return self.generate(prompt, context, temperature, *args, **kwargs)
 
     def get_model_name(self, *args, **kwargs) -> str:
+        """
+        Retrieves a descriptive identifier for the custom language model implementation.
+
+        Args:
+            self: The instance of the class.
+
+        Returns:
+            str: A string representing the custom LLM name.
+        """
+
         return "Implementation of custom LLM for evaluation."

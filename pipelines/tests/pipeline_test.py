@@ -77,14 +77,17 @@ correctness_metric = GEval(
 
 
 def choose_pipeline_test() -> None:
-    """Tests pipeline choosing functions.
-
-    Counts number of correctly chosen pipelines and measures elapsed time for
-    choosing and checking results.
-    Writes results to .txt file at the specified path.
-
-    Returns: None
     """
+    Evaluates the accuracy and efficiency of the function selection workflow by measuring correct selections, timing performance, and recording detailed metrics to a results file.
+
+        Counts number of correctly chosen pipelines and measures elapsed time for
+        choosing and checking results.
+        Writes results to .txt file at the specified path.
+
+        Returns: None
+
+    """
+
     print("Pipeline choosing test is running...")
     path_to_results = Path(
         path_to_data, "test_results", "pipeline_choose_test_results.txt"
@@ -127,14 +130,17 @@ Average pipeline check time: {avg_pipe_check_time}""",
 
 
 def choose_functions_test() -> None:
-    """Tests API functions choosing function.
-
-    Counts number of correctly chosen function and measures elapsed time for
-    choosing and checking results.
-    Writes results to .txt file at the specified path.
-
-    Returns: None
     """
+    Evaluates the selection and validation process for determining the most appropriate functions based on input queries. Tracks accuracy, measures performance timing for each stage, and outputs a summary of results to a text file for further analysis.
+
+        Counts number of correctly chosen function and measures elapsed time for
+        choosing and checking results.
+        Writes results to .txt file at the specified path.
+
+        Returns: None
+
+    """
+
     print("API functions choosing test is running...")
     path_to_results = Path(
         path_to_data, "test_results", "choose_functions_test_results.txt"
@@ -182,14 +188,17 @@ Average function checking time: {avg_func_check_time}""",
 
 
 def accessibility_pipeline_test() -> None:
-    """Tests whole accessibility pipeline.
-
-    Counts the number of correctly chosen functions and correct answers, measures
-    elapsed time for choosing and checking and final answer generation.
-    Writes results to .txt file at the specified path.
-
-    Returns: None
     """
+    Evaluates the end-to-end process by selecting functions, verifying their correctness, generating answers, and measuring time taken for each step; summarizes performance metrics and saves the results to a text file.
+
+        Counts the number of correctly chosen functions and correct answers, measures
+        elapsed time for choosing and checking and final answer generation.
+        Writes results to .txt file at the specified path.
+
+        Returns: None
+
+    """
+
     print("Accessibility pipeline test is running...")
     path_to_results = Path(
         path_to_data, "test_results", "eng_accessibility_pipeline_test_results.txt"
@@ -293,7 +302,8 @@ Average answer generation time: {avg_model_time}""",
 
 
 def strategy_pipeline_test(metrics_to_calculate: List, chunk_num: int = 4) -> None:
-    """Tests strategy pipeline.
+    """
+    Executes a comprehensive evaluation workflow that retrieves relevant information, generates responses, computes specified assessment metrics, measures processing times, and records detailed results and summaries to output files.
 
     Evaluate metrics for model answers using 'deepeval' and measures elapsed
     time for context retrieving and final answer generation.
@@ -303,7 +313,9 @@ def strategy_pipeline_test(metrics_to_calculate: List, chunk_num: int = 4) -> No
         metrics_to_calculate: list of metrics to be calculated
         chunk_num: number of chunks to be extracted from vector storage
     Returns: None
+
     """
+
     print("Strategy pipeline test is running...")
     path_to_results = Path(
         path_to_data, "test_results", "strategy_pipeline_test_results.txt"

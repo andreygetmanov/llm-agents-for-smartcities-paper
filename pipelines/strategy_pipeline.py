@@ -11,7 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 def retrieve_context_from_chroma(q: str, collect_name: str, c_num: int) -> str:
-    """Retrieves the given number of chunks from ChromaDB based on the user question."""
+    """
+    Retrieves the given number of chunks from ChromaDB based on the user question.
+    """
+
     res = chroma_connector.chroma_view(q, collect_name, c_num)
     context = ""
     context_list = []
@@ -33,15 +36,17 @@ def strategy_development_pipeline(
     question: str,
     chunk_num: int = 4,
 ) -> str:
-    """Pipeline designed to handle strategy development data.
-    Extracts the context from ChromaDB and passes it to the LLM to answer the question.
+    """
+    Coordinates the retrieval of relevant information from a database based on a user's question and generates a response using a language model.
 
     Args:
         question: A question from the user.
         chunk_num: Number of chunks that will be returned by the DB.
 
     Returns: Answer to the question.
+
     """
+
     collection_name = "strategy-spb"
     logger.info(f"Chroma collection name: {collection_name}")
     logger.info(f"Chunks num: {chunk_num}")

@@ -32,25 +32,31 @@ class BaseTextProcessor(TextProcessorInterface):
     """
 
     def __init__(self, input_format: StrTemplateType, out_format: Callable) -> None:
-        """Initialize preprocessor with required input template and output template.
+        """
+        Set up the processor with a specific template for input formatting and a function to convert responses into a string format.
 
         Args:
             input_format (StrTemplateType): Required format of input data for LLM usage.
             out_format (Callable): Function which describes how to transform LLM's response
             to str.
+
         """
+
         self.input_format = input_format
         self.out_format = out_format
 
     def preprocess_input(self, **kwargs) -> StrTemplateType:
-        """Process prompt to acceptable for LLM format in accordance to given format.
-
-        Raises:
-            ValueError: _description_
-
-        Returns:
-            StrTemplateType: _description_
         """
+        Transforms the input prompt using the defined format and supplied arguments, ensuring the result matches the expected template structure.
+
+                Raises:
+                    ValueError: _description_
+
+                Returns:
+                    StrTemplateType: _description_
+
+        """
+
         match self.input_format:
             case str():
                 return json.loads(
@@ -69,7 +75,8 @@ class BaseTextProcessor(TextProcessorInterface):
                 raise ValueError(f"{type(self.input_format)} is not supported.")
 
     def preprocess_output(self, text: Response) -> str:
-        """Retrieves text answer from the received response.
+        """
+        Extracts and formats the textual content from a model's response using a specified transformation function.
 
         Process response from the model to string format using given
         transformation function.
@@ -79,5 +86,7 @@ class BaseTextProcessor(TextProcessorInterface):
 
         Returns:
             str: LLM's response in text format.
+
         """
+
         return self.out_format(text)

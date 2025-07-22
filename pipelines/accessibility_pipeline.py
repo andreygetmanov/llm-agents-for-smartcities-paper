@@ -19,7 +19,10 @@ logger = logging.getLogger(__name__)
 
 # TODO: move this to api module/tools
 def define_default_functions(type: str, id: str, coordinates: List) -> List[str]:
-    """Selects default functions based on the territory type."""
+    """
+    Selects default functions based on the territory type.
+    """
+
     default_funcs = []
     if type == "city":
         default_funcs.append("get_general_stats_city")
@@ -32,7 +35,10 @@ def define_default_functions(type: str, id: str, coordinates: List) -> List[str]
 
 # TODO: move this to api module/tools
 def set_default_value_if_empty(res_funcs: List[str]) -> List[str]:
-    """Sets a default value in case no functions were selected by the LLM."""
+    """
+    Sets a default value in case no functions were selected by the LLM.
+    """
+
     if not res_funcs:
         res_funcs.append("get_general_stats_city")
     logger.info(f"Selected functions: {res_funcs}")
@@ -42,10 +48,8 @@ def set_default_value_if_empty(res_funcs: List[str]) -> List[str]:
 def service_accessibility_pipeline(
     question: str, coordinates: List, t_type: str, t_id: str
 ) -> str:
-    """Pipeline designed to handle service accessibility data.
-    Uses a function calling LLM to choose the correct data source
-    to collect the context for the given question. Extracts the
-    context and passes it to another LLM to answer the question.
+    """
+    Coordinates information with external data sources based on a user's question and map selection, dynamically gathering relevant context and using advanced language models to provide a concise answer.
 
     Args:
         question: A question from the user.
@@ -54,7 +58,9 @@ def service_accessibility_pipeline(
         t_id: The name of selected territory.
 
     Returns: Answer to the question.
+
     """
+
     agent = Agent("LLAMA_FC_URL", accessibility_tools)
     with Timer() as t:
         res_funcs = agent.choose_functions(question, fc_sys_prompt, fc_user_prompt)

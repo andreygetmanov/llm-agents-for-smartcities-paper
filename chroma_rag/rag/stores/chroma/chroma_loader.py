@@ -16,7 +16,8 @@ def load_documents_to_chroma_db(
     loading_batch_size: int = 32,
     **kwargs,
 ) -> None:
-    """Loads documents into a Chroma DB collection using a processing pipeline.
+    """
+    Processes and ingests batches of documents into a database collection through a customizable pipeline, allowing for adjustable batch sizes and dynamic transformation steps.
 
     Args:
         settings (Optional[ChromaSettings]): The settings for configuring the Chroma DB and document processing pipeline.
@@ -27,7 +28,9 @@ def load_documents_to_chroma_db(
 
     Returns:
         None
+
     """
+
     if settings is None:
         settings = default_settings
 
@@ -44,4 +47,8 @@ def load_documents_to_chroma_db(
         docs_collection_path=settings.docs_collection_path
     ).update_docs_transformers(**kwargs).go_to_next_step(
         batch_size=processing_batch_size
-    ).store_settings(settings).load(loading_batch_size=loading_batch_size)
+    ).store_settings(
+        settings
+    ).load(
+        loading_batch_size=loading_batch_size
+    )

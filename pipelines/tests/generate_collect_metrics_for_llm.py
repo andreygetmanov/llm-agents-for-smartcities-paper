@@ -21,6 +21,10 @@ def get_answer_and_evaluate(
     system_prompt: str,
     save_path: Path,
 ):
+    """
+    No valid docstring found.
+    """
+
     model_name = model
     model = VseGPTConnector(model=model, sys_prompt=system_prompt)
 
