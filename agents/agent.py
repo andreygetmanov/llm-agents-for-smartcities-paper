@@ -21,12 +21,15 @@ class Agent:
     """A class that represents an LLM agent that can work with any type of input data."""
 
     def __init__(self, fc_llm_name: str, tools: List[Dict]) -> None:
-        """Creates an Agent object.
+        """
+        Initializes the agent by loading configuration settings, setting up the model endpoint, and preparing a suite of tool functions for subsequent operations.
 
         Args:
             fc_llm_name: URL of the function calling LLM.
             tools: A list of tools for the FC LLM to choose from.
+
         """
+
         load_dotenv(path_to_config)
         self.model_url = os.environ.get(fc_llm_name)
         self.tools = tools
@@ -35,11 +38,17 @@ class Agent:
 
     @staticmethod
     def get_nearest_levenstein(string: str, correct_strings: List[str]) -> str:
-        """Returns the most similar correct string from the list for the given string."""
+        """
+        Returns the most similar correct string from the list for the given string.
+        """
+
         return min(correct_strings, key=lambda x: levenshtein_distance(string, x))
 
     def parse_function_names_from_agent_answer(self, llm_res: str) -> List[str]:
-        """Finds function names (from the current tools) in the LLM answer."""
+        """
+        Finds function names (from the current tools) in the LLM answer.
+        """
+
         predicted_funcs = llm_res.replace("[Correct answer]: ", "").split(" ")
         predicted_funcs = list(map(lambda x: x.strip(), predicted_funcs))
         correct_pred_funcs = set(
@@ -55,7 +64,8 @@ class Agent:
     def retrieve_context_from_api(
         t_name: str, t_type: str, coords: List, chosen_functions: List
     ) -> str:
-        """Call all functions to get the context.
+        """
+        Aggregate data by executing up to three provided API functions related to the specified territory and compile their outputs into a unified text response.
 
         Calls all given functions in order to collect the relevant context
         for the given question.
@@ -67,7 +77,9 @@ class Agent:
             chosen_functions: Functions from the API module.
 
         Returns: The results of all functions combined into one string.
+
         """
+
         if coords:
             coordinates = prepare_typed_coords(coords)
         else:
@@ -90,7 +102,8 @@ class Agent:
     def get_relevant_functions(
         self, question: str, sys_prompt: str, user_prompt: str
     ) -> List[str]:
-        """Send request to get suitable functions.
+        """
+        Identifies the most appropriate functions from the available tools by formulating prompts and interacting with a language model, then returns a list of suggested functions based on the analysis.
 
         Sends a request to a function calling LLM to choose the most suitable
         functions to get the context for the given question. Possible functions
@@ -102,7 +115,9 @@ class Agent:
             user_prompt: User prompt for the current tools.
 
         Returns: List of the most suitable functions.
+
         """
+
         sys_prompt = Template(sys_prompt).safe_substitute(
             tools=str(self.tools).replace('"', "'")
         )
@@ -115,10 +130,13 @@ class Agent:
     def choose_functions(
         self, question: str, sys_prompt: str, user_prompt: str
     ) -> List[str]:
-        """Chose function to get the context for given question.
-
-        Chooses the most suitable functions to get the context for the given question.
         """
+        Selects the most appropriate functions based on the provided question and prompts to determine relevant actions.
+
+                Chooses the most suitable functions to get the context for the given question.
+
+        """
+
         llm_res = self.get_relevant_functions(question, sys_prompt, user_prompt)
         llm_res_funcs = self.parse_function_names_from_agent_answer(llm_res)
         return llm_res_funcs
@@ -130,7 +148,8 @@ class Agent:
         sys_prompt: str,
         user_prompt: str,
     ) -> str:
-        """Check the chosen list of functions.
+        """
+        Verifies whether the selected options produced by the language model are suitable for the given input and, if necessary, suggests more appropriate alternatives by leveraging an external validation through another language model.
 
         Checks if the list of functions returned by the LLM is accurate. If it is not,
         returns a better choice for the given question. The validation is done
@@ -144,7 +163,9 @@ class Agent:
 
         Returns: A string that contains the corrected names of the chosen
         functions in a free format.
+
         """
+
         user_prompt = Template(user_prompt).safe_substitute(
             question=question, answer=answer, tools=str(self.tools).replace('"', "'")
         )
@@ -160,7 +181,10 @@ class Agent:
         sys_prompt: str,
         user_prompt: str,
     ) -> List[str]:
-        """Corrects the list of functions returned by the function calling LLM."""
+        """
+        Corrects the list of functions returned by the function calling LLM.
+        """
+
         llm_check_res = self.check_choice_correctness(
             question, answer, sys_prompt, user_prompt
         )

@@ -12,6 +12,22 @@ load_dotenv(ROOT / "config.env")
 
 
 class Api:
+    """
+    Api is responsible for handling HTTP requests to the external service and managing responses.
+
+    Methods:
+        - get_data
+        - post_data
+        - authenticate
+
+    Attributes:
+        base_url: The base endpoint for the API.
+        token: Authentication token used for requests.
+        session: HTTP session object for connection reuse.
+
+    The methods perform GET and POST requests and handle authentication, while the attributes store the API endpoint, authentication token, and session information.
+    """
+
     class EndpointsListings:
         _base_url = os.environ.get("ENDPOINT_LISTINGS_URL")
         cities = GetEndpoint("/api/list/cities", param_names=("centers_only",))

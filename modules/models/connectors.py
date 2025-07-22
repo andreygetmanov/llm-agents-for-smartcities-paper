@@ -26,24 +26,33 @@ class BaseLanguageModelInterface(metaclass=ABCMeta):
 
     @property
     def system_prompt(self) -> str:
-        """Return model's instructions by system.
-
-        Returns:
-            str: Main instructions how to answer to given prompts.
         """
+        Return the foundational guidelines that shape the model’s responses.
+
+                Returns:
+                    str: Main instructions how to answer to given prompts.
+
+        """
+
         return self._system_prompt
 
     def set_system_prompt(self, sys_prompt: str) -> None:
-        """Override current system prompt with a new one.
+        """
+        Update the instructions sent to the model by assigning a new system prompt
 
         Args:
             sys_prompt (str): New system instructions to the model.
+
         """
+
         self._system_prompt = sys_prompt
 
     @staticmethod
     def prep_context(context: str) -> str:
-        """Preps context so that it can be inserted into a JSON structure."""
+        """
+        Preps context so that it can be inserted into a JSON structure.
+        """
+
         return context.replace('"', "'")
 
     @abstractmethod
@@ -85,19 +94,25 @@ class WEBLanguageModel(BaseLanguageModelInterface):
 
     @property
     def url(self) -> str:
-        """Returns url address for requests to hosted model.
-
-        Returns:
-            Optional[str]: URL address.
         """
+        Retrieves the endpoint address used for making external queries
+
+                Returns:
+                    Optional[str]: URL address.
+
+        """
+
         return self._url
 
     def set_url(self, new_address: str) -> None:
-        """Override current model url with new one.
+        """
+        Update the model's endpoint address to use a different URL
 
         Args:
             new_address (str): model's new url address.
+
         """
+
         self._url = new_address
 
     def generate(
@@ -132,7 +147,9 @@ class WEBLanguageModel(BaseLanguageModelInterface):
         if context is None:
             formatted_prompt = f"Question: {prompt}"
         else:
-            formatted_prompt = f"Context: {self.prep_context(context)} Question: {prompt}"
+            formatted_prompt = (
+                f"Context: {self.prep_context(context)} Question: {prompt}"
+            )
 
         message = self.text_processor.preprocess_input(
             job_id=str(job_id),
@@ -157,6 +174,20 @@ class GPTWebLanguageModel(BaseLanguageModelInterface):
     def __init__(
         self, sys_prompt: str, model_name: str, text_processor: TextProcessorInterface
     ) -> None:
+        """
+        Initializes the class by setting up the base configuration with a system prompt, assigning a text processor, storing the model's name, and creating an OpenAI model instance using a specified API key and service endpoint.
+
+        Initializes the class with a system prompt, model name, and text processor.
+
+        Args:
+            sys_prompt: The system prompt string to initialize with.
+            model_name: The name of the model to be used.
+            text_processor: The text processor instance used for processing text.
+
+        Returns:
+            None: This method does not return anything.
+        """
+
         super().__init__(sys_prompt)
         self.text_processor = text_processor
         self._model_name = model_name
@@ -173,7 +204,8 @@ class GPTWebLanguageModel(BaseLanguageModelInterface):
         top_p: float = 0.15,
         **kwargs,
     ) -> str:
-        """Get a response from the model on a given prompt.
+        """
+        Generate a model-driven textual response based on the provided prompt, optionally leveraging additional contextual information and customizable decoding parameters to influence response style and diversity.
 
         Args:
             prompt (str): User prompt.
@@ -186,7 +218,9 @@ class GPTWebLanguageModel(BaseLanguageModelInterface):
 
         Returns:
             str: LLM's response for given prompt.
+
         """
+
         if context is None:
             prompt = f"Question: {prompt}"
         else:

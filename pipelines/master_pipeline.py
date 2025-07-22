@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 def answer_question_with_llm(
     question: str, coordinates: List, t_type: str, t_id: str, chunk_num: int
 ) -> str:
-    """Chooses and runs all pipelines that are required to get
-    the answer to the user's question.
+    """
+    Determines and executes the appropriate data processing workflows to generate a response to the provided user query.
 
     Args:
         question: A question from the user.
@@ -31,10 +31,14 @@ def answer_question_with_llm(
             a context.
 
     Returns: Answer to the question.
+
     """
+
     agent = Agent("LLAMA_FC_URL", pipeline_tools)
     with Timer() as t:
-        res_funcs = agent.choose_functions(question, fc_sys_prompt, binary_fc_user_prompt)
+        res_funcs = agent.choose_functions(
+            question, fc_sys_prompt, binary_fc_user_prompt
+        )
         logger.info(f"Pipeline choose time: {t.seconds_from_start} sec")
     # with Timer() as t:
     #     checked_res_funcs = agent.check_functions(

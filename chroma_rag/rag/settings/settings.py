@@ -5,6 +5,24 @@ from pydantic_settings import BaseSettings
 
 
 class ChromaSettings(BaseSettings):
+    """
+    Manages configuration settings for connecting and interacting with a Chroma server and document collections.
+
+    Class Attributes:
+    - chroma_host: The hostname of the Chroma server.
+    - chroma_port: The port on which the Chroma server is running.
+    - allow_reset: Whether resetting of indexes or collections is allowed.
+    - collection_name: The name of the document collection in Chroma.
+    - embedding_name: Identifier for the embedding to use.
+    - embedding_host: The host for the embedding service.
+    - distance_fn: The distance function used for similarity calculations.
+    - docs_processing_config: Configuration parameters for document processing.
+    - docs_collection_path: Filesystem path to the document collection.
+
+    Methods:
+    - Provides class-level configuration management for Chroma database connections and behavior.
+    """
+
     # Chroma DB settings
     chroma_host: str = "10.32.1.34"
     chroma_port: int = 9941

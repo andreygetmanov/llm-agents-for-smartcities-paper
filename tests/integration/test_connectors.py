@@ -62,6 +62,10 @@ load_dotenv(ROOT / "config.env")
     ],
 )
 def test_all_models(models, prompts: Dict[str, str]) -> None:
+    """
+    No valid docstring found.
+    """
+
     message_processor = BaseTextProcessor(models["template"], models["func"])
     model = WEBLanguageModel(
         prompts["sys_prompt"], models["url"], text_processor=message_processor

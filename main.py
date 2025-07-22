@@ -13,6 +13,20 @@ from utils.logging_config import configure_logging
 
 
 class Question(BaseModel):
+    """
+    Represents a question related to a specific territory, capturing relevant context and identification data.
+
+    Class Attributes:
+    - question_body: The main text or content of the question.
+    - chunk_num: Identifies the chunk or section of a document associated with the question.
+    - territory_name_id: Identifier for the territory name relevant to the question.
+    - territory_type: Type or classification of the associated territory.
+    - selection_zone: Describes the area or spatial zone selected for this question.
+
+    Methods:
+    - Method list for interacting with or modifying the question's data and context.
+    """
+
     question_body: str = (
         "What are the demographic development problems of Saint Petersburg?"
     )
@@ -51,7 +65,8 @@ logger = logging.getLogger(__name__)
 
 @app.post("/question")
 async def read_item(question: Question):
-    """Get a response for a given question using a RAG pipeline with a vector DB and LLM.
+    """
+    Process a user's question by retrieving related contextual information and generating a detailed response, tailored to specific territory and region parameters supplied in the request.
 
     Args:
         question_body (str): a question from the user (natural language, no additional prompts)
@@ -62,7 +77,9 @@ async def read_item(question: Question):
 
     Returns:
         dict: llm_res - pipeline's answer to the user's question
+
     """
+
     logger.info(f"Query: {question.question_body}")
     logger.info(f"Number of chunks: {question.chunk_num}")
     logger.info(f"Territory name: {question.territory_name_id}")
@@ -82,9 +99,12 @@ async def read_item(question: Question):
 
 @app.get("/build_test")
 async def build_test():
-    """Endpoint for build test
-
-    Returns:
-        dict: message - just an indicator
     """
+    Checks if the application is operational
+
+        Returns:
+            dict: message - just an indicator
+
+    """
+
     return {"message": "App is running"}
